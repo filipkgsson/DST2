@@ -505,6 +505,7 @@ void set_deadline(uint deadline){
     first = FALSE;
     readylist->pHead->pNext->pTask->DeadLine = deadline;
     insert(readylist, extract(readylist->pHead->pNext));
+    Running = readylist->pHead->pNext->pTask;
     LoadContext();
   }
 }
