@@ -9,7 +9,6 @@ uint kernelRun = !RUNNING;
 TCB *Running;
 uint tickcounter;
 
-
 list * create_list()
 {
 	list * mylist = (list *)calloc(1, sizeof(list));
@@ -70,6 +69,42 @@ void insert(list *prRefList, listobj *prObj)
       tmp = tmp->pNext;
     }
     if (tmp->pNext != prRefList->pTail && prObj->pTask->DeadLine > tmp->pTask->DeadLine) { // mitten av listan
+      prObj->pNext = tmp->pNext;
+      (tmp->pNext)->pPrevious = prObj;
+      tmp->pNext = prObj;
+      prObj->pPrevious = tmp;
+    }
+    else if (tmp->pNext == prRefList->pTail) { //Sist i listan
+      tmp->pNext = prObj;
+      prObj->pPrevious = tmp;
+      prObj->pNext = prRefList->pTail;
+      prRefList->pTail->pPrevious = prObj;
+    }
+    else { //Först i listan
+      prObj->pPrevious = tmp;
+      prObj->pNext = tmp->pNext;
+      tmp->pNext->pPrevious = prObj; //Här
+      tmp->pNext = prObj;
+    }
+  }
+  else {
+    // List was empty, so the new list _is_ the node provided
+    prRefList->pHead->pNext = prObj;
+    prRefList->pTail->pPrevious = prObj;
+    prObj->pNext = prRefList->pTail;
+    prObj->pPrevious = prRefList->pHead;
+  }
+}
+
+void insertTimer(list *prRefList, listobj *prObj)
+{
+  listobj *tmp = prRefList->pHead;
+  
+  if (tmp->pNext != prRefList->pTail) {
+    while (tmp->pNext != prRefList->pTail && prObj->nTCnt > tmp->pNext->nTCnt) {
+      tmp = tmp->pNext;
+    }
+    if (tmp->pNext != prRefList->pTail && prObj->nTCnt > tmp->nTCnt) { // mitten av listan
       prObj->pNext = tmp->pNext;
       (tmp->pNext)->pPrevious = prObj;
       tmp->pNext = prObj;
@@ -227,7 +262,7 @@ exception send_wait(mailbox *mBox, void *Data){
       mBox->pHead->pNext->pPrevious = message->pPrevious;
       mBox->nMessages ++;
       if(message->pBlock != NULL && waitinglist->pHead->pNext != waitinglist->pTail){
-        insert(readylist, extract(waitinglist->pHead->pNext));
+        insert(readylist, extract(message->pBlock));
         Running=readylist->pHead->pNext->pTask;
         free(message);
       }
@@ -292,7 +327,7 @@ exception receive_wait(mailbox *mBox, void *Data){
       mBox->pHead->pNext->pPrevious = message->pPrevious;
       mBox->nMessages --;
       if(message->pBlock != NULL && waitinglist->pHead->pNext != waitinglist->pTail){
-        insert(readylist, extract(waitinglist->pHead->pNext));
+        insert(readylist, extract(message->pBlock));
         Running=readylist->pHead->pNext->pTask;
         free(message);
       }
@@ -409,7 +444,7 @@ exception receive_no_wait(mailbox *mBox, void *Data){
       mBox->nMessages --;
       status = OK;
       if(message->pBlock != NULL && waitinglist->pHead->pNext != waitinglist->pTail){
-        insert(readylist, extract(waitinglist->pHead->pNext));
+        insert(readylist, extract(message->pBlock));
         Running = readylist->pHead->pNext->pTask;
         free(message);
       }
@@ -433,7 +468,7 @@ exception wait(uint nTicks){
   if(first){
     first = FALSE;
     readylist->pHead->pNext->nTCnt = nTicks + tickcounter;
-    insert(timerlist, extract(readylist->pHead->pNext));
+    insertTimer(timerlist, extract(readylist->pHead->pNext));
     Running = readylist->pHead->pNext->pTask;
     LoadContext();
   }

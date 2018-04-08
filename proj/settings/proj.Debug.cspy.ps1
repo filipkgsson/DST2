@@ -23,9 +23,9 @@ param([String]$debugfile = "");
 
 if ($debugfile -eq "")
 {
-& "E:\Program\IAR Embedded Workbench for ARM\common\bin\cspybat" -f "E:\DST\proj\settings\proj.Debug.general.xcl" --backend -f "E:\DST\proj\settings\proj.Debug.driver.xcl" 
+& "E:\Program\IAR Embedded Workbench for ARM\common\bin\cspybat" -f "E:\DST\DST2\proj\settings\proj.Debug.general.xcl" --backend -f "E:\DST\DST2\proj\settings\proj.Debug.driver.xcl" 
 }
 else
 {
-& "E:\Program\IAR Embedded Workbench for ARM\common\bin\cspybat" -f "E:\DST\proj\settings\proj.Debug.general.xcl" --debug_file=$debugfile --backend -f "E:\DST\proj\settings\proj.Debug.driver.xcl" 
+& "E:\Program\IAR Embedded Workbench for ARM\common\bin\cspybat" -f "E:\DST\DST2\proj\settings\proj.Debug.general.xcl" --debug_file=$debugfile --backend -f "E:\DST\DST2\proj\settings\proj.Debug.driver.xcl" 
 }
