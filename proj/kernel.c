@@ -395,7 +395,7 @@ exception send_no_wait(mailbox *mBox, void *Data){
       mBox->pHead->pNext->pPrevious = message->pPrevious;
       mBox->nMessages ++;
       if(message->pBlock != NULL && waitinglist->pHead->pNext != waitinglist->pTail){
-        insert(readylist, message->pBlock);
+        insert(readylist, extract(message->pBlock));
         Running=readylist->pHead->pNext->pTask;
         free(message);
       }
@@ -512,14 +512,13 @@ void set_deadline(uint deadline){
 
 void TimerInt(void){
   tickcounter++;
-  if(timerlist->pHead->pNext->nTCnt == tickcounter){
+  while(timerlist->pHead->pNext->nTCnt == tickcounter){
     insert(readylist, extract(timerlist->pHead->pNext));
-    Running = readylist->pHead->pNext->pTask;
   }
-  if(waitinglist->pHead->pNext->pTask->DeadLine < tickcounter){
+  while(waitinglist->pHead->pNext->pTask->DeadLine < tickcounter){
     insert(readylist, extract(waitinglist->pHead->pNext));
   }
-  if(timerlist->pHead->pNext->pTask->DeadLine < tickcounter){
+  while(timerlist->pHead->pNext->pTask->DeadLine < tickcounter){
     insert(readylist, extract(timerlist->pHead->pNext));
   }
   Running = readylist->pHead->pNext->pTask;
