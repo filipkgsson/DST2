@@ -332,7 +332,8 @@ exception receive_wait(mailbox *mBox, void *Data){
         free(message);
       }
       else{
-        free(message->pData);
+        //free(message->pData);
+        free(message);
       }
     }
     else{
@@ -449,7 +450,8 @@ exception receive_no_wait(mailbox *mBox, void *Data){
         free(message);
       }
       else{
-        free(message->pData);
+        //free(message->pData);
+        free(message);
       }
     }
     else{

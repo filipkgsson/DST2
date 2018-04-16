@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
     <DebugChecksum>
-        <Checksum>2898010749</Checksum>
+        <Checksum>2667631225</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -76,9 +76,12 @@
         <Bp1>_ 0 "STD_CODE2" "{E:\DST}.77.1" 0 0 1 "" 0 ""</Bp1>
         <Bp2>_ 0 "STD_CODE2" "{E:\DST}.77.1" 0 0 1 "" 0 ""</Bp2>
         <Bp3>_ 0 "STD_CODE2" "{E:\DST\DST2}.77.1" 0 0 1 "" 0 ""</Bp3>
-        <Bp4>_ 0 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.150.1" 0 0 1 "" 0 ""</Bp4>
-        <Bp5>_ 0 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.150.1" 0 0 1 "" 0 ""</Bp5>
-        <Count>6</Count>
+        <Bp4>_ 0 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.153.1" 0 0 1 "" 0 ""</Bp4>
+        <Bp5>_ 0 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.153.1" 0 0 1 "" 0 ""</Bp5>
+        <Bp6>_ 1 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.133.3" 0 0 1 "" 0 ""</Bp6>
+        <Bp7>_ 1 "STD_CODE2" "{$PROJ_DIR$\context-demo.c}.67.3" 0 0 1 "" 0 ""</Bp7>
+        <Bp8>_ 1 "STD_CODE2" "{$PROJ_DIR$\context.s79}.77.1" 0 0 1 "" 0 ""</Bp8>
+        <Count>9</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>

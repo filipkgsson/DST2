@@ -43,41 +43,42 @@ void main(void){
   
 void task1(void){
   //Test 1:
-  if(receive_wait(mb, (void*)&nData_t1) == FAIL || nData_t1 != TEST_PATTERN_1){
+  nData_t1 = TEST_PATTERN_1;
+  if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
     while(1);
   }
+  wait(10);
   //Rensar upp test 1:
-  send_wait(mb, (void*)&nData_t2);
+  receive_wait(mb, (void*)&nData_t2);
   nData_t1 = nData_t2 = nData_t3 = 0x00;
   //Set up test 2:
   wait(1);
   //Test 2:
-  if(receive_wait(mb, (void*)&nData_t2) == FAIL){
+  nData_t2 = TEST_PATTERN_2;
+  if(send_no_wait(mb, (void*)&nData_t2) == FAIL){
     while(1);
   }
+  wait(10);
   //Rensar upp test 2:
+  receive_wait(mb, (void*)&nData_t2);
   nData_t1 = nData_t2 = nData_t3 = 0x00;
-  //Test 3:
-  set_deadline(2);
-  if(receive_wait(mb, (void*)&nData_t1) != DEADLINE_REACHED){
+  //Test 1 med receive_no_wait:
+  nData_t1 = TEST_PATTERN_1;
+  if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
     while(1);
   }
-  //Rensar upp test 3:
-  set_deadline(1000);
-  wait(8);
-  //Test 1 med send_no_wait:
-  if(receive_wait(mb, (void*)&nData_t1) == FAIL || nData_t1 != TEST_PATTERN_1){
-    while(1);
-  }
+  wait(10);
   //Rensar upp test 1:
-  send_no_wait(mb, (void*)&nData_t2);
+  receive_wait(mb, (void*)&nData_t2);
   nData_t1 = nData_t2 = nData_t3 = 0x00;
-  //Set up test 2 med send_no_wait:
+  //Set up test 2 med receive_no_wait:
   wait(1);
-  //Test 2 med send_no_wait:
-  if(receive_wait(mb, (void*)&nData_t2) == FAIL){
+  //Test 2 med receive_no_wait:
+  nData_t2 = TEST_PATTERN_2;
+  if(send_no_wait(mb, (void*)&nData_t2) == FAIL){
     while(1);
   }
+  wait(10);
   //Rensar upp test 2:
   nData_t1 = nData_t2 = nData_t3 = 0x00;
   terminate(); //Task 2 kör
@@ -85,55 +86,57 @@ void task1(void){
 
 void task2(void){
   //Test 1:
-  if(receive_wait(mb, (void*)&nData_t2) == FAIL){
+  nData_t2 = TEST_PATTERN_2;
+  if(send_no_wait(mb, (void*)&nData_t2) == FAIL){
     while(1);
   }
-  //Test 2:
-  if(receive_wait(mb, (void*)&nData_t1) == FAIL || nData_t1 != TEST_PATTERN_1){
-    while(1);
-  }
-  //Rensar upp test 2:
-  send_wait(mb, (void*)&nData_t2);
-  //Test 3:
   wait(10);
-  //Test 1 med send_no_wait:
-  if(receive_wait(mb, (void*)&nData_t2) == FAIL){
+  //Test 2:
+  nData_t1 = TEST_PATTERN_1;
+  if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
     while(1);
   }
-  //Test 2 med send_no_wait:
-  if(receive_wait(mb, (void*)&nData_t1) == FAIL || nData_t1 != TEST_PATTERN_1){
-    while(1);
-  }
+  wait(10);
   //Rensar upp test 2:
-  send_no_wait(mb, (void*)&nData_t2);
+  //receive_wait(mb, (void*)&nData_t2);
+  //Test 1 med receive_no_wait:
+  nData_t2 = TEST_PATTERN_2;
+  if(send_no_wait(mb, (void*)&nData_t2) == FAIL){
+    while(1);
+  }
+  wait(10);
+  //Test 2 med receive_no_wait:
+  nData_t1 = TEST_PATTERN_1;
+  if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
+    while(1);
+  }
+  wait(10);
+  //Rensar upp test 2:
+  receive_wait(mb, (void*)&nData_t2);
   terminate(); //Idle task kör
 }
 
 void task3(void){
-  //Test 1 send_wait:
-  nData_t3 = TEST_PATTERN_1;
-  if(send_wait(mb, (void*)&nData_t3) == FAIL){
+  //Test 1:
+  if(receive_wait(mb, (void*)&nData_t3) == FAIL || nData_t3 != TEST_PATTERN_1){
     while(1);
   }
+  wait(10);
   //Set up test 2:
   wait(1);
   //Test 2:
-  nData_t3 = TEST_PATTERN_1;
-  if(send_wait(mb, (void*)&nData_t3) == FAIL){
+  if(receive_wait(mb, (void*)&nData_t3) == FAIL || nData_t3 != TEST_PATTERN_1){
     while(1);
   }
-  //Test 3:
   wait(10);
-  //Test 1 med send_no_wait:
-  nData_t3 = TEST_PATTERN_1;
-  if(send_no_wait(mb, (void*)&nData_t3) == FAIL){
+  //Test 1 med receive_no_wait:
+  if(receive_no_wait(mb, (void*)&nData_t3) == FAIL || nData_t3 != TEST_PATTERN_1){
     while(1);
   }
   //Set up test 2:
   wait(1);
-  //Test 2 med send_no_wait:
-  nData_t3 = TEST_PATTERN_1;
-  if(send_no_wait(mb, (void*)&nData_t3) == FAIL){
+  //Test 2 med receive_no_wait:
+  if(receive_no_wait(mb, (void*)&nData_t3) == FAIL || nData_t3 != TEST_PATTERN_1){
     while(1);
   }
   terminate(); //Idle task sen Task 2
