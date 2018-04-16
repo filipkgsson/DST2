@@ -80,6 +80,7 @@ void task1(void){
   }
   wait(10);
   //Rensar upp test 2:
+  receive_wait(mb, (void*)&nData_t2);
   nData_t1 = nData_t2 = nData_t3 = 0x00;
   terminate(); //Task 2 kör
 }
@@ -96,9 +97,7 @@ void task2(void){
   if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
     while(1);
   }
-  wait(10);
-  //Rensar upp test 2:
-  //receive_wait(mb, (void*)&nData_t2);
+  wait(11);
   //Test 1 med receive_no_wait:
   nData_t2 = TEST_PATTERN_2;
   if(send_no_wait(mb, (void*)&nData_t2) == FAIL){
@@ -110,9 +109,7 @@ void task2(void){
   if(send_no_wait(mb, (void*)&nData_t1) == FAIL){
     while(1);
   }
-  wait(10);
-  //Rensar upp test 2:
-  receive_wait(mb, (void*)&nData_t2);
+  wait(11);
   terminate(); //Idle task kör
 }
 
@@ -133,6 +130,7 @@ void task3(void){
   if(receive_no_wait(mb, (void*)&nData_t3) == FAIL || nData_t3 != TEST_PATTERN_1){
     while(1);
   }
+  wait(10);
   //Set up test 2:
   wait(1);
   //Test 2 med receive_no_wait:

@@ -332,7 +332,7 @@ exception receive_wait(mailbox *mBox, void *Data){
         free(message);
       }
       else{
-        //free(message->pData);
+        free(message->pData);
         free(message);
       }
     }
@@ -404,11 +404,13 @@ exception send_no_wait(mailbox *mBox, void *Data){
     }
     else{
       message = (msg*)calloc(1, sizeof(msg));
-      if(message == NULL){
+      message->pData = (char*)calloc(1, sizeof(char));
+      if(message == NULL || message->pData == NULL){
+        free(message->pData);
         free(message);
         return FAIL;
       }
-      message->pData = Data;
+      memcpy(message->pData, Data, sizeof(char));
       if(mBox->nMessages >= mBox->nMaxMessages){
         temp = mBox->pHead->pNext;
         temp->pNext->pPrevious = mBox->pHead;
@@ -450,7 +452,7 @@ exception receive_no_wait(mailbox *mBox, void *Data){
         free(message);
       }
       else{
-        //free(message->pData);
+        free(message->pData);
         free(message);
       }
     }
